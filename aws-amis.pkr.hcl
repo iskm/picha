@@ -27,7 +27,7 @@ source "amazon-ebs" "debian" {
   region        = "us-east-1"
   source_ami_filter {
     filters = {
-      name                = "Debian 12"
+      image-id                = "ami-064519b8c76274859"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
 
@@ -40,50 +40,10 @@ source "amazon-ebs" "debian" {
 
 }
 
-source "amazon-ebs" "amazon" {
-  ami_name      = "${var.ami_prefix}-amazon-${local.timestamp}"
-  instance_type = "t2.medium"
-  region        = "us-east-1"
-  source_ami_filter {
-    filters = {
-      name                = "Amazon Linux 2023 AMI"
-      root-device-type    = "ebs"
-      virtualization-type = "hvm"
-
-    }
-    most_recent = true
-    owners      = ["amazon"]
-
-  }
-  ssh_username = "ec2-user"
-
-}
-
-source "amazon-ebs" "redhat" {
-  ami_name      = "${var.ami_prefix}-redhat-${local.timestamp}"
-  instance_type = "t2.medium"
-  region        = "us-east-1"
-  source_ami_filter {
-    filters = {
-      name                = "Red Hat Enterprise Linux 9 (HVM)"
-      root-device-type    = "ebs"
-      virtualization-type = "hvm"
-
-    }
-    most_recent = true
-    owners      = ["309956199498"]
-
-  }
-  ssh_username = "ubuntu"
-
-}
-
 build {
   name = "AMIs for homelab use"
   sources = [
     "source.amazon-ebs.debian",
-    "source.amazon-ebs.amazon",
-    "source.amazon-ebs.redhat"
   ]
 
   provisioner "shell" {
@@ -92,7 +52,7 @@ build {
 
   provisioner "file" {
     source = "files/id_rsa.pub"
-    destination = "/home/"
+    destination = "/home/admin/"
 
   }
 
