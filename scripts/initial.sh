@@ -6,11 +6,12 @@ IFS=$'\n\t'
 
 case $ID in
   "debian" )
-    sudo apt update -y && sudo apt upgrade -y
-    sudo apt install vim git curl tmux stow ranger
+    sudo apt-get update -y && sudo apt-get upgrade -y
+    sudo apt-get install -y  vim git curl tmux stow ranger
     cd /home/admin/
-    git clone git@github.com:iskm/dots.git
-    mv .bashrc .bashrc.bak; mv .bash_profile .bash_profile.bak
+    git clone https://github.com/iskm/dots.git 
+    if [[ -e .bashrc  ]]; then mv .bashrc .bashrc.bak; fi
+    if [[ -e .bash_profile ]]; then mv .bash_profile .bash_profile.bak; fi
     cd dots
     stow bash bin git shellenv tmux vim ranger
     ;;
